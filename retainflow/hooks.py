@@ -165,23 +165,14 @@ app_license = "mit"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"retainflow.tasks.all"
-# 	],
-# 	"daily": [
-# 		"retainflow.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"retainflow.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"retainflow.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"retainflow.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"daily": [
+		"retainflow.tasks.daily"
+	],
+	"hourly": [
+		"retainflow.tasks.hourly"
+	],
+}
 
 # Testing
 # -------

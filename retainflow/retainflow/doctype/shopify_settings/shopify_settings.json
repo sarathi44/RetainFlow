@@ -1,0 +1,195 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "creation": "2026-10-12 11:50:37.955945",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "credentials_section",
+  "shopify_url",
+  "access_token",
+  "api_version",
+  "column_break_conn",
+  "connection_status",
+  "store_section",
+  "shop_name",
+  "shop_email",
+  "column_break_store",
+  "currency",
+  "timezone",
+  "myshopify_domain",
+  "sync_section",
+  "enable_sync",
+  "sync_frequency",
+  "order_sync_limit",
+  "column_break_sync",
+  "last_sync_time",
+  "last_sync_status",
+  "total_orders_synced",
+  "last_error_message"
+ ],
+ "fields": [
+  {
+   "fieldname": "credentials_section",
+   "fieldtype": "Section Break",
+   "label": "Shopify API Credentials"
+  },
+  {
+   "description": "e.g. your-store.myshopify.com or https://your-store.myshopify.com",
+   "fieldname": "shopify_url",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Shopify Store URL",
+   "reqd": 1
+  },
+  {
+   "description": "Shopify Admin API token (shpat_...)",
+   "fieldname": "access_token",
+   "fieldtype": "Password",
+   "in_list_view": 1,
+   "label": "Admin API Access Token",
+   "reqd": 1
+  },
+  {
+   "default": "2024-10",
+   "fieldname": "api_version",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "API Version",
+   "options": "2024-10\n2024-07\n2024-04\n2024-01\n2025-01",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_conn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Not Connected",
+   "fieldname": "connection_status",
+   "fieldtype": "Select",
+   "label": "Connection Status",
+   "options": "Not Connected\nConnected\nError",
+   "read_only": 1
+  },
+  {
+   "fieldname": "store_section",
+   "fieldtype": "Section Break",
+   "label": "Store Information"
+  },
+  {
+   "fieldname": "shop_name",
+   "fieldtype": "Data",
+   "label": "Shop Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shop_email",
+   "fieldtype": "Data",
+   "label": "Shop Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_store",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Data",
+   "label": "Default Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "timezone",
+   "fieldtype": "Data",
+   "label": "Timezone",
+   "read_only": 1
+  },
+  {
+   "fieldname": "myshopify_domain",
+   "fieldtype": "Data",
+   "label": "Shopify Domain",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sync_section",
+   "fieldtype": "Section Break",
+   "label": "Order Synchronization"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_sync",
+   "fieldtype": "Check",
+   "label": "Enable Periodic Sync"
+  },
+  {
+   "default": "Hourly",
+   "fieldname": "sync_frequency",
+   "fieldtype": "Select",
+   "label": "Sync Frequency",
+   "options": "Hourly\nDaily"
+  },
+  {
+   "default": "50",
+   "fieldname": "order_sync_limit",
+   "fieldtype": "Int",
+   "label": "Orders Per Sync (Limit)"
+  },
+  {
+   "fieldname": "column_break_sync",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_sync_time",
+   "fieldtype": "Datetime",
+   "label": "Last Sync Time",
+   "read_only": 1
+  },
+  {
+   "default": "Pending",
+   "fieldname": "last_sync_status",
+   "fieldtype": "Select",
+   "label": "Last Sync Status",
+   "options": "Pending\nSuccess\nFailed",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_orders_synced",
+   "fieldtype": "Int",
+   "label": "Total Orders Synced",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_error_message",
+   "fieldtype": "Small Text",
+   "label": "Last Error Message",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-12 11:50:37.955945",
+ "modified_by": "Administrator",
+ "module": "Retainflow",
+ "name": "Shopify Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

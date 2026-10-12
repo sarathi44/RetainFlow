@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "allow_bulk_edit": 1,
+ "allow_rename": 1,
+ "creation": "2026-10-12 11:50:37.638116",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "variant_title",
+  "sku",
+  "quantity",
+  "price",
+  "total_discount",
+  "amount",
+  "shopify_product_id",
+  "shopify_variant_id",
+  "shopify_line_item_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Item Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "variant_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Variant"
+  },
+  {
+   "fieldname": "sku",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SKU"
+  },
+  {
+   "default": "1",
+   "fieldname": "quantity",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Quantity"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Unit Price",
+   "options": "currency"
+  },
+  {
+   "fieldname": "total_discount",
+   "fieldtype": "Currency",
+   "label": "Discount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "currency"
+  },
+  {
+   "fieldname": "shopify_product_id",
+   "fieldtype": "Data",
+   "label": "Shopify Product ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopify_variant_id",
+   "fieldtype": "Data",
+   "label": "Shopify Variant ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shopify_line_item_id",
+   "fieldtype": "Data",
+   "label": "Line Item ID",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-12 11:50:37.638116",
+ "modified_by": "Administrator",
+ "module": "Retainflow",
+ "name": "Shopify Order Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}
