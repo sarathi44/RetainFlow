@@ -8,8 +8,8 @@
  "field_order": [
   "credentials_section",
   "shopify_url",
-  "access_token",
-  "api_version",
+  "client_id",
+  "client_secret",
   "column_break_conn",
   "connection_status",
   "store_section",
@@ -27,7 +27,15 @@
   "last_sync_time",
   "last_sync_status",
   "total_orders_synced",
-  "last_error_message"
+  "last_error_message",
+  "product_sync_section",
+  "last_product_sync_time",
+  "column_break_product_sync",
+  "total_products_synced",
+  "customer_sync_section",
+  "last_customer_sync_time",
+  "column_break_customer_sync",
+  "total_customers_synced"
  ],
  "fields": [
   {
@@ -44,20 +52,19 @@
    "reqd": 1
   },
   {
-   "description": "Shopify Admin API token (shpat_...)",
-   "fieldname": "access_token",
-   "fieldtype": "Password",
+   "description": "API Client Key from your Shopify custom app (e.g. 32-character hex string)",
+   "fieldname": "client_id",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Admin API Access Token",
+   "label": "Client ID",
    "reqd": 1
   },
   {
-   "default": "2024-10",
-   "fieldname": "api_version",
-   "fieldtype": "Select",
+   "description": "API Client Secret Key from your Shopify custom app",
+   "fieldname": "client_secret",
+   "fieldtype": "Password",
    "in_list_view": 1,
-   "label": "API Version",
-   "options": "2024-10\n2024-07\n2024-04\n2024-01\n2025-01",
+   "label": "Client API Secret",
    "reqd": 1
   },
   {
@@ -160,6 +167,50 @@
    "read_only": 1
   },
   {
+   "collapsible": 1,
+   "fieldname": "product_sync_section",
+   "fieldtype": "Section Break",
+   "label": "Product Synchronization"
+  },
+  {
+   "fieldname": "last_product_sync_time",
+   "fieldtype": "Datetime",
+   "label": "Last Product Sync Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_product_sync",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_products_synced",
+   "fieldtype": "Int",
+   "label": "Total Products Synced",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "customer_sync_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Synchronization"
+  },
+  {
+   "fieldname": "last_customer_sync_time",
+   "fieldtype": "Datetime",
+   "label": "Last Customer Sync Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_customer_sync",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_customers_synced",
+   "fieldtype": "Int",
+   "label": "Total Customers Synced",
+   "read_only": 1
+  },
+  {
    "fieldname": "last_error_message",
    "fieldtype": "Small Text",
    "label": "Last Error Message",
@@ -170,7 +221,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-10-12 11:50:37.955945",
+ "modified": "2026-10-13 00:00:00.200000",
  "modified_by": "Administrator",
  "module": "Retainflow",
  "name": "Shopify Settings",

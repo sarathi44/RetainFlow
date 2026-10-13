@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.tests import IntegrationTestCase
+
 from retainflow.shopify_api import sync_single_order
 
 
@@ -16,29 +17,31 @@ class IntegrationTestShopifyOrder(IntegrationTestCase):
 			frappe.delete_doc("Shopify Order", "999888777", force=True)
 
 	def test_order_creation_and_totals(self):
-		order = frappe.get_doc({
-			"doctype": "Shopify Order",
-			"shopify_order_id": "999888777",
-			"shopify_order_name": "#9999",
-			"financial_status": "paid",
-			"fulfillment_status": "fulfilled",
-			"total_tax": 5.0,
-			"total_shipping": 10.0,
-			"items": [
-				{
-					"title": "Widget A",
-					"quantity": 2,
-					"price": 25.0,
-					"total_discount": 0.0,
-				},
-				{
-					"title": "Widget B",
-					"quantity": 1,
-					"price": 50.0,
-					"total_discount": 10.0,
-				}
-			]
-		})
+		order = frappe.get_doc(
+			{
+				"doctype": "Shopify Order",
+				"shopify_order_id": "999888777",
+				"shopify_order_name": "#9999",
+				"financial_status": "paid",
+				"fulfillment_status": "fulfilled",
+				"total_tax": 5.0,
+				"total_shipping": 10.0,
+				"items": [
+					{
+						"title": "Widget A",
+						"quantity": 2,
+						"price": 25.0,
+						"total_discount": 0.0,
+					},
+					{
+						"title": "Widget B",
+						"quantity": 1,
+						"price": 50.0,
+						"total_discount": 10.0,
+					},
+				],
+			}
+		)
 		order.insert(ignore_permissions=True)
 
 		self.assertEqual(order.name, "999888777")

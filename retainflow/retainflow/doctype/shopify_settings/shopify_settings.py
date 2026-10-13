@@ -3,7 +3,14 @@
 
 import frappe
 from frappe.model.document import Document
-from retainflow.shopify_api import clean_shopify_url, test_shopify_connection, sync_orders
+
+from retainflow.shopify_api import (
+	clean_shopify_url,
+	sync_customers,
+	sync_orders,
+	sync_products,
+	test_shopify_connection,
+)
 
 
 class ShopifySettings(Document):
@@ -14,26 +21,24 @@ class ShopifySettings(Document):
 	@frappe.whitelist()
 	def test_connection(self):
 		"""
-		Tests connection to Shopify API using current or passed credentials.
+		Tests connection to Shopify API using current or passed client credentials.
 		"""
-		token = None
+		client_secret = None
 		try:
-			token = self.get_password("access_token")
+			client_secret = self.get_password("client_secret")
 		except Exception:
 			pass
-		if not token:
-			token = self.access_token
+		if not client_secret:
+			client_secret = self.client_secret
 
-		if not self.shopify_url or not token:
-			frappe.throw("Please provide both Shopify Store URL and Admin API Access Token.")
-
-		api_version = self.api_version or "2024-10"
+		if not self.shopify_url or not self.client_id or not client_secret:
+			frappe.throw("Please provide Shopify Store URL, Client ID and Client API Secret.")
 
 		try:
 			shop_info = test_shopify_connection(
 				shop_url=self.shopify_url,
-				access_token=token,
-				api_version=api_version,
+				client_id=self.client_id,
+				client_secret=client_secret,
 			)
 
 			self.shop_name = shop_info.get("shop_name")
@@ -54,7 +59,7 @@ class ShopifySettings(Document):
 			self.connection_status = "Error"
 			self.save(ignore_permissions=True)
 			frappe.db.commit()
-			frappe.throw(f"Connection test failed: {str(e)}")
+			frappe.throw(f"Connection test failed: {e!s}")
 
 	@frappe.whitelist()
 	def sync_orders_now(self):
@@ -63,3 +68,17 @@ class ShopifySettings(Document):
 		"""
 		limit = self.order_sync_limit or 50
 		return sync_orders(limit=limit)
+
+	@frappe.whitelist()
+	def sync_products_now(self):
+		"""
+		Triggers product synchronization from Shopify.
+		"""
+		return sync_products(limit=50)
+
+	@frappe.whitelist()
+	def sync_customers_now(self):
+		"""
+		Triggers customer synchronization from Shopify.
+		"""
+		return sync_customers(limit=50)
