@@ -16,6 +16,11 @@ class ShopifyOrder(Document):
 	def validate(self):
 		self.calculate_totals()
 
+	def on_update(self):
+		from retainflow.loyalty import process_order
+
+		process_order(self)
+
 	def calculate_totals(self):
 		if self.items:
 			subtotal = 0.0

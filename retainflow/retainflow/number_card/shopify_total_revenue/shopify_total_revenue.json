@@ -2,7 +2,6 @@
  "aggregate_function_based_on": "total_price",
  "color": "#449CF0",
  "creation": "2026-10-12 11:56:37.784467",
- "currency": "INR",
  "docstatus": 0,
  "doctype": "Number Card",
  "document_type": "Shopify Order",

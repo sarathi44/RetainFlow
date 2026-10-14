@@ -12,6 +12,26 @@ from retainflow.shopify_api import (
 	test_shopify_connection,
 )
 
+DASHBOARD_DOCS = {
+	"Dashboard Chart": ["Shopify Orders Trend"],
+	"Number Card": [
+		"Shopify Total Orders",
+		"Shopify Total Revenue",
+		"Shopify Pending Orders",
+		"Shopify Fulfilled Orders",
+	],
+}
+
+
+def update_dashboard_currency(currency):
+	"""Keep dashboard chart and number cards on the workspace in the shop's currency."""
+	if not currency:
+		return
+	for doctype, names in DASHBOARD_DOCS.items():
+		for name in names:
+			if frappe.db.exists(doctype, name):
+				frappe.db.set_value(doctype, name, "currency", currency, update_modified=False)
+
 
 class ShopifySettings(Document):
 	def validate(self):
@@ -48,6 +68,7 @@ class ShopifySettings(Document):
 			self.myshopify_domain = shop_info.get("myshopify_domain")
 			self.connection_status = "Connected"
 			self.save(ignore_permissions=True)
+			update_dashboard_currency(self.currency)
 			frappe.db.commit()
 
 			return {

@@ -26,6 +26,15 @@
   "note",
   "created_at_shopify",
   "updated_at_shopify",
+  "loyalty_section",
+  "loyalty_tier",
+  "loyalty_points",
+  "tier_downgrade_to",
+  "tier_downgrade_due",
+  "column_break_loyalty",
+  "eligible_orders",
+  "eligible_spend",
+  "last_eligible_order",
   "addresses_section",
   "addresses",
   "raw_data_section",
@@ -108,7 +117,6 @@
   {
    "fieldname": "orders_count",
    "fieldtype": "Int",
-   "in_list_view": 1,
    "label": "Orders Count"
   },
   {
@@ -140,6 +148,71 @@
    "fieldname": "updated_at_shopify",
    "fieldtype": "Datetime",
    "label": "Updated At (Shopify)"
+  },
+  {
+   "fieldname": "loyalty_section",
+   "fieldtype": "Section Break",
+   "label": "Loyalty"
+  },
+  {
+   "fieldname": "loyalty_tier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Loyalty Tier",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "loyalty_points",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Loyalty Points",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "tier_downgrade_to",
+   "fieldtype": "Data",
+   "label": "Moving Down To",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "depends_on": "tier_downgrade_to",
+   "fieldname": "tier_downgrade_due",
+   "fieldtype": "Date",
+   "label": "Downgrade Due",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_loyalty",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "eligible_orders",
+   "fieldtype": "Int",
+   "label": "Eligible Orders",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "eligible_spend",
+   "fieldtype": "Currency",
+   "label": "Eligible Spend",
+   "no_copy": 1,
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_eligible_order",
+   "fieldtype": "Datetime",
+   "label": "Last Eligible Order",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "addresses_section",
@@ -175,7 +248,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-10-13 00:00:00.000000",
+ "modified": "2026-10-14 18:00:00.000000",
  "modified_by": "Administrator",
  "module": "Retainflow",
  "name": "Shopify Customer",

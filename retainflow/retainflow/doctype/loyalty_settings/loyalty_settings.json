@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "creation": "2026-10-14 16:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "earning_section",
+  "earning_enabled",
+  "points_per_unit",
+  "column_break_earning",
+  "effective_from",
+  "historical_orders",
+  "eligibility_section",
+  "eligibility_rules",
+  "tiers_section",
+  "tier_basis",
+  "tiers"
+ ],
+ "fields": [
+  {
+   "description": "Changes apply to the next eligible order. Posted points keep their recorded rate.",
+   "fieldname": "earning_section",
+   "fieldtype": "Section Break",
+   "label": "Points Earning"
+  },
+  {
+   "default": "1",
+   "fieldname": "earning_enabled",
+   "fieldtype": "Check",
+   "label": "Earning Enabled"
+  },
+  {
+   "default": "0.1",
+   "description": "Eligible amount = merchandise minus discounts. Shipping, tax, duties and tips are excluded. Rounded down to whole points per order.",
+   "fieldname": "points_per_unit",
+   "fieldtype": "Float",
+   "label": "Points per 1 unit of Eligible Amount",
+   "non_negative": 1,
+   "precision": "4",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_earning",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "effective_from",
+   "fieldtype": "Datetime",
+   "label": "Program Start (store time)",
+   "reqd": 1
+  },
+  {
+   "default": "Award once for imported eligible orders",
+   "fieldname": "historical_orders",
+   "fieldtype": "Select",
+   "label": "Historical Orders",
+   "options": "Award once for imported eligible orders\nOnly orders after the program start date"
+  },
+  {
+   "fieldname": "eligibility_section",
+   "fieldtype": "Section Break",
+   "label": "Eligible Order"
+  },
+  {
+   "fieldname": "eligibility_rules",
+   "fieldtype": "HTML",
+   "label": "Eligibility Rules",
+   "options": "<ul class=\"text-muted\" style=\"margin:0;padding-left:18px\"><li>Financial status paid</li><li>Not cancelled or voided at evaluation</li><li>Linked to a Shopify customer (guest orders do not earn)</li><li>Earning enabled when the order is evaluated</li></ul><p class=\"text-muted\" style=\"margin-top:8px\">Refunds and cancellations after award are not reversed automatically.</p>"
+  },
+  {
+   "description": "Highest threshold met wins. Upgrades are immediate; there are no automatic downgrades.",
+   "fieldname": "tiers_section",
+   "fieldtype": "Section Break",
+   "label": "VIP Tiers"
+  },
+  {
+   "default": "Cumulative spend",
+   "fieldname": "tier_basis",
+   "fieldtype": "Select",
+   "label": "Tier Basis",
+   "options": "Cumulative spend\nCumulative earned points"
+  },
+  {
+   "fieldname": "tiers",
+   "fieldtype": "Table",
+   "label": "Tiers",
+   "options": "Loyalty Tier"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-14 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Retainflow",
+ "name": "Loyalty Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

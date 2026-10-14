@@ -1,11 +1,17 @@
 import json
 import re
+from datetime import timedelta
+from zoneinfo import ZoneInfo
 
 import frappe
 import requests
-from frappe.utils import flt, get_datetime, now_datetime
+from frappe.utils import flt, get_datetime, get_system_timezone, now_datetime
+
+from retainflow.loyalty import link_orders_to_customer
 
 DEFAULT_API_VERSION = "2024-10"
+# re-read a little before the last sync so records changed mid-sync are not missed
+SYNC_OVERLAP = timedelta(minutes=10)
 
 
 def clean_shopify_url(url: str) -> str:
@@ -113,6 +119,41 @@ def test_shopify_connection(
 	}
 
 
+def changed_since(last_sync) -> str | None:
+	"""Shopify `updated_at_min` value for a stored (system-timezone) sync time."""
+	if not last_sync:
+		return None
+	since = get_datetime(last_sync).replace(tzinfo=ZoneInfo(get_system_timezone())) - SYNC_OVERLAP
+	return since.isoformat()
+
+
+def fetch_shopify_records(endpoint: str, headers: dict, params: dict, key: str, label: str) -> list[dict]:
+	"""
+	GETs a Shopify list endpoint. With `updated_at_min` in params every page is
+	followed (cursor pagination via the Link header); otherwise one page is read.
+	"""
+	records = []
+	url, page_params = endpoint, params
+	while url:
+		try:
+			response = requests.get(url, headers=headers, params=page_params, timeout=25)
+		except requests.RequestException as e:
+			frappe.throw(f"Error fetching {label} from Shopify: {e!s}")
+
+		if response.status_code != 200:
+			frappe.throw(
+				f"Shopify {label.title()} API returned error {response.status_code}: {response.text}"
+			)
+
+		records.extend(response.json().get(key, []))
+		if not params.get("updated_at_min"):
+			break
+		# the next-page URL already carries its cursor and limit
+		url, page_params = response.links.get("next", {}).get("url"), None
+
+	return records
+
+
 def fetch_shopify_orders(
 	shop_url: str,
 	client_id: str,
@@ -120,29 +161,20 @@ def fetch_shopify_orders(
 	api_version: str = DEFAULT_API_VERSION,
 	limit: int = 50,
 	status: str = "any",
+	updated_at_min: str | None = None,
 ) -> list[dict]:
 	"""
-	Fetches orders from Shopify using client credentials.
+	Fetches orders from Shopify using client credentials: every order changed
+	since `updated_at_min` when given, else the newest `limit` orders.
 	"""
 	access_token = get_access_token(shop_url, client_id, client_secret)
 	clean_url = clean_shopify_url(shop_url)
 	endpoint = f"https://{clean_url}/admin/api/{api_version}/orders.json"
-	headers = get_shopify_headers(access_token)
-	params = {
-		"status": status,
-		"limit": min(limit, 250),
-	}
+	params = {"status": status, "limit": 250 if updated_at_min else min(limit, 250)}
+	if updated_at_min:
+		params["updated_at_min"] = updated_at_min
 
-	try:
-		response = requests.get(endpoint, headers=headers, params=params, timeout=25)
-	except requests.RequestException as e:
-		frappe.throw(f"Error fetching orders from Shopify: {e!s}")
-
-	if response.status_code != 200:
-		frappe.throw(f"Shopify Orders API returned error {response.status_code}: {response.text}")
-
-	data = response.json()
-	return data.get("orders", [])
+	return fetch_shopify_records(endpoint, get_shopify_headers(access_token), params, "orders", "orders")
 
 
 def fetch_shopify_products(
@@ -180,27 +212,23 @@ def fetch_shopify_customers(
 	client_secret: str,
 	api_version: str = DEFAULT_API_VERSION,
 	limit: int = 50,
+	updated_at_min: str | None = None,
 ) -> list[dict]:
 	"""
-	Fetches customers (with addresses inline) from Shopify
-	using client credentials.
+	Fetches customers (with addresses inline) from Shopify using client
+	credentials: every customer changed since `updated_at_min` when given,
+	else the first `limit` customers.
 	"""
 	access_token = get_access_token(shop_url, client_id, client_secret)
 	clean_url = clean_shopify_url(shop_url)
 	endpoint = f"https://{clean_url}/admin/api/{api_version}/customers.json"
-	headers = get_shopify_headers(access_token)
-	params = {"limit": min(limit, 250)}
+	params = {"limit": 250 if updated_at_min else min(limit, 250)}
+	if updated_at_min:
+		params["updated_at_min"] = updated_at_min
 
-	try:
-		response = requests.get(endpoint, headers=headers, params=params, timeout=25)
-	except requests.RequestException as e:
-		frappe.throw(f"Error fetching customers from Shopify: {e!s}")
-
-	if response.status_code != 200:
-		frappe.throw(f"Shopify Customers API returned error {response.status_code}: {response.text}")
-
-	data = response.json()
-	return data.get("customers", [])
+	return fetch_shopify_records(
+		endpoint, get_shopify_headers(access_token), params, "customers", "customers"
+	)
 
 
 def format_variant_option_values(variant: dict) -> str:
@@ -401,6 +429,9 @@ def sync_single_customer(customer_data: dict, shop_url: str) -> str:
 	else:
 		customer_doc.save(ignore_permissions=True)
 
+	# orders synced before this customer existed earn points now
+	link_orders_to_customer(customer_id)
+
 	return customer_id
 
 
@@ -421,6 +452,7 @@ def sync_customers(limit: int = 50) -> dict:
 			client_secret=client_secret,
 			api_version=DEFAULT_API_VERSION,
 			limit=sync_limit,
+			updated_at_min=changed_since(settings.last_customer_sync_time),
 		)
 		synced_count = 0
 		for customer_data in customers:
@@ -600,6 +632,11 @@ def sync_single_order(order_data: dict, shop_url: str) -> str:
 	order_doc.order_status = order_status
 	order_doc.cancelled_at = cancelled_at
 	order_doc.cancel_reason = order_data.get("cancel_reason") or ""
+	customer_id = str(customer_data.get("id") or "")
+	order_doc.shopify_customer_id = customer_id
+	order_doc.shopify_customer = (
+		customer_id if customer_id and frappe.db.exists("Shopify Customer", customer_id) else None
+	)
 	order_doc.customer_name = customer_name
 	order_doc.customer_email = order_data.get("email") or customer_data.get("email") or ""
 	order_doc.customer_phone = order_data.get("phone") or customer_data.get("phone") or ""
@@ -668,6 +705,7 @@ def sync_orders(limit: int = 50) -> dict:
 			client_secret=client_secret,
 			api_version=DEFAULT_API_VERSION,
 			limit=sync_limit,
+			updated_at_min=changed_since(settings.last_sync_time),
 		)
 		synced_count = 0
 		for order_data in orders:

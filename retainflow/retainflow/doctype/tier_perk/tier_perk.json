@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "creation": "2026-10-14 18:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tier",
+  "points_multiplier",
+  "free_shipping",
+  "free_shipping_minimum",
+  "early_access",
+  "birthday_bonus",
+  "support",
+  "shopify_tag"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "tier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tier",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "default": "1",
+   "description": "Delivered by the earning engine",
+   "fieldname": "points_multiplier",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Points Multiplier",
+   "non_negative": 1,
+   "precision": "2"
+  },
+  {
+   "columns": 2,
+   "default": "None",
+   "fieldname": "free_shipping",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Free Shipping",
+   "options": "None\nOver minimum order\nAlways"
+  },
+  {
+   "columns": 1,
+   "depends_on": "eval:doc.free_shipping=='Over minimum order'",
+   "fieldname": "free_shipping_minimum",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Free Shipping Minimum"
+  },
+  {
+   "columns": 1,
+   "default": "None",
+   "fieldname": "early_access",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Early Access to Sales",
+   "options": "None\n24 hours\n48 hours"
+  },
+  {
+   "columns": 1,
+   "default": "0",
+   "fieldname": "birthday_bonus",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Birthday Bonus (points)",
+   "non_negative": 1
+  },
+  {
+   "columns": 1,
+   "default": "Standard",
+   "fieldname": "support",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Support",
+   "options": "Standard\nPriority"
+  },
+  {
+   "columns": 2,
+   "fieldname": "shopify_tag",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Shopify Tag",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-14 18:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Retainflow",
+ "name": "Tier Perk",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

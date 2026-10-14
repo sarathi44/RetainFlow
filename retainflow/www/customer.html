@@ -1,0 +1,12 @@
+{% extends "templates/blank.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="/assets/retainflow/css/retainflow.css?v={{ css_v }}">
+<div id="rf-customer" data-csrf-token="{{ csrf_token }}" data-customer="{{ customer_name | e }}">
+	<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center" class="rf-muted">
+		Loading RetainFlow · Customer…
+	</div>
+</div>
+<script src="/assets/retainflow/js/lib/vue.global.prod.js"></script>
+<script src="/assets/retainflow/js/customer_page.js?v={{ js_v }}"></script>
+{% endblock %}

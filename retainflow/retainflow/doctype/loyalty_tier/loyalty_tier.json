@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "creation": "2026-10-14 16:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tier_name",
+  "threshold",
+  "benefit",
+  "is_vip",
+  "members"
+ ],
+ "fields": [
+  {
+   "fieldname": "tier_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tier",
+   "reqd": 1
+  },
+  {
+   "description": "Cumulative eligible spend or earned points, depending on the tier basis",
+   "fieldname": "threshold",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Threshold",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "benefit",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Benefit (descriptive)"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_vip",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "VIP"
+  },
+  {
+   "default": "0",
+   "fieldname": "members",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Members",
+   "no_copy": 1,
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-14 16:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Retainflow",
+ "name": "Loyalty Tier",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

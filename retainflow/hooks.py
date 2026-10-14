@@ -35,7 +35,15 @@ app_license = "mit"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/retainflow/css/retainflow.css"
-# app_include_js = "/assets/retainflow/js/retainflow.js"
+app_include_js = "retainflow_desk.bundle.js"
+
+website_redirects = [
+	{"source": "/customers", "target": "/desk/shopify-customer", "redirect_http_status": 302},
+]
+
+website_route_rules = [
+	{"from_route": "/customers/<name>", "to_route": "customer"},
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/retainflow/css/retainflow.css"
@@ -166,12 +174,8 @@ app_license = "mit"
 # ---------------
 
 scheduler_events = {
-	"daily": [
-		"retainflow.tasks.daily"
-	],
-	"hourly": [
-		"retainflow.tasks.hourly"
-	],
+	"daily": ["retainflow.tasks.daily"],
+	"hourly": ["retainflow.tasks.hourly"],
 }
 
 # Testing
@@ -262,4 +266,3 @@ scheduler_events = {
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
-

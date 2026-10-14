@@ -1,19 +1,6 @@
 frappe.listview_settings["Shopify Customer"] = {
-	get_indicator: function (doc) {
-		const state_colors = {
-			enabled: "green",
-			invited: "orange",
-			disabled: "grey",
-		};
-		const state = doc.state || "enabled";
-		return [__(state.toUpperCase()), state_colors[state] || "grey", "state,=," + state];
-	},
 	onload: function (list_view) {
 		list_view.page.add_inner_button(__("Sync from Shopify"), () => {
-			frappe.show_alert({
-				message: __("Fetching customers from Shopify..."),
-				indicator: "blue",
-			});
 			frappe.call({
 				method: "retainflow.shopify_api.sync_customers",
 				args: { limit: 50 },
@@ -33,10 +20,6 @@ frappe.listview_settings["Shopify Customer"] = {
 					}
 				},
 			});
-		});
-
-		list_view.page.add_inner_button(__("Shopify Settings"), () => {
-			frappe.set_route("Form", "Shopify Settings");
 		});
 	},
 };
